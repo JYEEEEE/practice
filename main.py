@@ -15,7 +15,7 @@ import tornado.ioloop
 import tornado.web
 
 from backend.home import MainHandler, MathAddHandler
-from backend.auth.handler import Register, LoginS
+from backend.auth.handler import Register, Login
 
 
 def make_app():
