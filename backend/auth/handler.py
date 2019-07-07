@@ -1,7 +1,5 @@
 """
-# todo
 实现注册和登录
-
 """
 import json
 from tornado.web import RequestHandler
@@ -14,7 +12,7 @@ table = db.users
 class Register(RequestHandler):
     """
     input: {'login_name': xxxx, 'login_passwd': xxxx}
-    return: 1 成功， 0 失败
+    return: 1 注册成功， -1 该用户名已被注册， -2 请完整填写注册信息
     """
     def get(self):
         self.render('../templates/auth/register.html')
@@ -23,12 +21,18 @@ class Register(RequestHandler):
         ret_dict = {'code': 0}
         login_name = self.get_argument('login_name','')
         login_passwd = self.get_argument('login_passwd','')
+        if not login_name or not login_passwd:
+            ret_dict['code'] = -2
+            self.write(json.dumps(ret_dict))
+        name_result = table.find_one({'login_name': login_name})
+        if name_result:
+            ret_dict['code'] = -1
+            self.write(json.dumps(ret_dict))
         new_user = table.insert_one({'login_name':login_name,'login_passwd':login_passwd})
         if new_user.inserted_id:
             ret_dict['code'] = 1
+            self.write(json.dumps(ret_dict))
 
-        print('register')
-        self.write(json.dumps(ret_dict))
 
 class Login(RequestHandler):
     """
@@ -55,5 +59,3 @@ class Login(RequestHandler):
 
         self.write(json.dumps(ret_dict))
 
-# -1 --> '-1'
-# '-1' --> '"-1"'
