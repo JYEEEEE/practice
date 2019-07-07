@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>注册</title>
+</head>
+
+<body>
+    <h1>请输入注册信息</h1>
+    <input id="login_name" placeholder="请输入注册名"> 
+    <input id="login_passwd" placeholder="请输入密码" >
+    <input type="button" id="submit" value="提交">
+</body>
+<script src="../../static/js/base_utils.js"></script>
+<script src="../../static/js/jquery-1.10.2.js"></script>
+<script src="../../static/js/jquery.cookie.js"></script>
+<script>
+    $(function() {
+        $("#submit").on('click', function() {
+            var data = {
+                'login_name': $("#login_name").val(),
+                'login_passwd': $("#login_passwd").val()
+            }
+            ajaxPost('/register', data, function(ret) {
+                if (ret.code === 1) {
+                    alert('注册成功');
+                } else {
+                    alert('注册失败')；
+                }
+            })
+        })
+    })
+</script>
+</html>
