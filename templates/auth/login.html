@@ -1,0 +1,39 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <title>Login</title>  
+    <link rel="stylesheet" type="text/css" href="login.css"/>  
+</head>  
+<body>  
+    <div id="login">  
+        <h1>Login</h1>  
+        <form method="post">  
+            <input type="text" required="required" placeholder="用户名" id="login_name"></input>  
+            <input type="password" required="required" placeholder="密码" name="login_passwd"></input>  
+            <button class="but" type="submit" id="submit">登录</button>
+        </form>  
+    </div>  
+</body>
+<script src="../../static/js/base_utils.js"></script>
+<script src="../../static/js/jquery-1.10.2.js"></script>
+<script src="../../static/js/jquery.cookie.js"></script>
+<script>
+        $(function() {
+            $("#submit").on('click', function() {
+                var data = {
+                    'login_name': $("#login_name").val(),
+                    'login_passwd': $("#login_passwd").val()
+                }
+                ajaxPost('/login', data, function(ret) {
+                    if (ret.code === 1) {
+                        alert('登录成功');
+                        window.location.href = 'welcome.html'
+                    } else {
+                        alert('登录失败')
+                    }
+                })
+            })
+        })
+    </script>
+</html>  
