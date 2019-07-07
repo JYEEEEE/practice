@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<input type="text" class="num1">
+<input type="text" class="operator">
+<input type="text" class="num2">
+结果：<p id="result"></p>
+<input type="submit" id="submit">
+
+</body>
+<script src="../static/js/base_utils.js"></script>
+<script src="../static/js/jquery-1.10.2.js"></script>
+<script src="../static/js/jquery.cookie.js"></script>
+
+<script>
+    $("#submit").on('click', function() {
+        var n1 = $(".num1").val()
+        var n2 = $(".num2").val()
+        var operator = $(".operator").val()
+
+        ajaxPost('/add', {'number1': n1, 'number2': n2, 'operator': operator}, function(ret) {
+            console.log(ret)
+            $("#result").html(ret)
+        })
+    })
+</script>
+</html>
