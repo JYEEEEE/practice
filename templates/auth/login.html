@@ -3,7 +3,7 @@
 <head>  
     <meta charset="UTF-8">  
     <title>Login</title>  
-    <link rel="stylesheet" type="text/css" href="login.css"/>  
+    <link rel="stylesheet" type="text/css" href="../../static/css/login.css"/>  
 </head>  
 <body>  
     <div id="login">  
@@ -21,16 +21,22 @@
 <script>
         $(function() {
             $("#submit").on('click', function() {
+                console.log('click')
                 var data = {
                     'login_name': $("#login_name").val(),
                     'login_passwd': $("#login_passwd").val()
                 }
                 ajaxPost('/login', data, function(ret) {
+                    console.log(ret)
                     if (ret.code === 1) {
                         alert('登录成功');
                         window.location.href = 'welcome.html'
+                    } else if (ret.code === -1) {
+                        alert('没有该用户！')
+                    } else if (ret.code === -2) {
+                        alert('密码不对！！')
                     } else {
-                        alert('登录失败')
+                        alert('服务器不对劲')
                     }
                 })
             })

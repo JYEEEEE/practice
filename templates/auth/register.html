@@ -3,14 +3,14 @@
 <head>  
     <meta charset="UTF-8">  
     <title>Login</title>  
-    <link rel="stylesheet" type="text/css" href="login.css"/>  
+    <link rel="stylesheet" type="text/css" href="../../static/css/login.css"/>  
 </head>  
 <body>  
     <div id="login">  
         <h1>Register</h1>  
         <form method="post">  
             <input type="text" required="required" placeholder="用户名" id="login_name"></input>  
-            <input type="password" required="required" placeholder="密码" name="login_passwd"></input>  
+            <input type="password" required="required" placeholder="密码" id="login_passwd"></input>  
             <button class="but" type="submit" id="submit">注册</button>
         </form>  
     </div>  
@@ -21,15 +21,17 @@
 <script>
     $(function() {
         $("#submit").on('click', function() {
+            console.log('click')
             var data = {
                 'login_name': $("#login_name").val(),
                 'login_passwd': $("#login_passwd").val()
             }
             ajaxPost('/register', data, function(ret) {
                 if (ret.code === 1) {
-                    alert('注册成功');
+                    console.log('注册成功');
+                    //window.location.href = '/login'
                 } else {
-                    alert('注册失败');
+                    console.log('注册失败');
                 }
             })
         })
