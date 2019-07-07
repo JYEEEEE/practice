@@ -56,7 +56,11 @@ class Login(RequestHandler):
         login_name = self.get_argument('login_name','')
         login_passwd = self.get_argument('login_passwd','')
         name_result = table.find_one({'login_name':login_name})
-        passwd_result = table.find_one({'login_passwd':login_passwd})
+        passwd_result = table.find_one({'login_name':login_name, 'login_passwd':login_passwd})
+        
+        if not login_name or not login_passwd:
+            ret_dict['code'] = -3
+
         if name_result:
             if passwd_result:
                 ret_dict['code'] = 1

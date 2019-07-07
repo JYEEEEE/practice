@@ -27,7 +27,7 @@
             ajaxPost('/register', data, function(ret) {
                 if (ret.code === 1) {
                     alert('注册成功');
-                    //window.location.href = '/login'
+                    window.location.href = '/login'
                 } else if (ret.code === -1){
                     alert('该用户名已被注册')
                 } else if (ret.code === -2) {
