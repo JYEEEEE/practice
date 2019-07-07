@@ -8,11 +8,9 @@
 <body>  
     <div id="login">  
         <h1>Register</h1>  
-        <form method="post">  
-            <input type="text" required="required" placeholder="用户名" id="login_name"></input>  
-            <input type="password" required="required" placeholder="密码" id="login_passwd"></input>  
-            <button class="but" type="submit" id="submit">注册</button>
-        </form>  
+        <input type="text" required="required" placeholder="用户名" id="login_name"></input>  
+        <input type="password" required="required" placeholder="密码" id="login_passwd"></input>  
+        <button class="but" type="submit" id="submit">注册</button>
     </div>  
 </body>
 <script src="../../static/js/base_utils.js"></script>
@@ -28,10 +26,14 @@
             }
             ajaxPost('/register', data, function(ret) {
                 if (ret.code === 1) {
-                    console.log('注册成功');
+                    alert('注册成功');
                     //window.location.href = '/login'
+                } else if (ret.code === -1){
+                    alert('该用户名已被注册')
+                } else if (ret.code === -2) {
+                    alert('请正确填写注册信息')
                 } else {
-                    console.log('注册失败');
+                    alert('服务器异常！')
                 }
             })
         })

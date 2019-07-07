@@ -21,17 +21,25 @@ class Register(RequestHandler):
         ret_dict = {'code': 0}
         login_name = self.get_argument('login_name','')
         login_passwd = self.get_argument('login_passwd','')
+
+        print('register', login_name, login_passwd)
+
         if not login_name or not login_passwd:
             ret_dict['code'] = -2
             self.write(json.dumps(ret_dict))
+            return
         name_result = table.find_one({'login_name': login_name})
+        print(name_result)
         if name_result:
             ret_dict['code'] = -1
             self.write(json.dumps(ret_dict))
+            return
+
         new_user = table.insert_one({'login_name':login_name,'login_passwd':login_passwd})
         if new_user.inserted_id:
             ret_dict['code'] = 1
             self.write(json.dumps(ret_dict))
+            return
 
 
 class Login(RequestHandler):
