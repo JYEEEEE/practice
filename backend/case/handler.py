@@ -63,4 +63,4 @@ class NewCase(RequestHandler):
         if code_result:ret_dict['feedback'] = -1
             self.write(json.dumps(ret_dict))
             return
-        new_case = table_case.insert_one({'code':code, 'content'})
+        new_case = table_case.insert_one({'code':code, 'content':content})
