@@ -13,7 +13,7 @@
 创建时间： created_dt   datetime
 //用例的编辑人： editor
 编辑时间： updated_dt  datetime
-
+[{code:,content:,status:,}]
 
 实现4个功能
 1. 新增
@@ -22,10 +22,10 @@
 code/content/status
 输出：
 feedback:
-0    成功保存
-1    服务器异常
-2    编码code不唯一
-3    content为空
+1    成功保存
+0    服务器异常
+-1   编码code不唯一
+-2   元素之一为空
 ...
 
 2. 编辑
@@ -37,3 +37,30 @@ feedback/code/content/status/
 3. 删除
 4. 查询
 """
+
+import json
+import pymong
+from tornado.web import RequestHandler
+mongo_client = pymongo.MongoClient('mongodb://127.0.0.1:27017/')
+db = mongo_client['cases']
+table_case = db.test_cases
+
+class NewCase(RequestHandler):
+    def get(self):
+        self.render('../templates/case/add.html')
+
+    def post(self):
+        code = self.get_argument('code')
+        content = self.get_argument('content')
+        status = self.get_argument('status')
+
+        ret_dict['feedback'] = 0
+        if not code or not content or not status:
+            ret_dict['feedback'] = -2
+            self.write(json.dumps(ret_dict))
+            return
+        code_result = table.find_one({'code':code})
+        if code_result:ret_dict['feedback'] = -1
+            self.write(json.dumps(ret_dict))
+            return
+        new_case = table_case.insert_one({'code':code, 'content':content})
