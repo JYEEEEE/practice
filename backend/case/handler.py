@@ -42,12 +42,14 @@ import json
 import pymongo
 import time
 from tornado.web import RequestHandler
+
 mongo_client = pymongo.MongoClient('mongodb://127.0.0.1:27017/')
 db = mongo_client['cases']
 table_case = db.test_cases
 
+
 class NewCase(RequestHandler):
-    '''
+    """
     新增用例文本
     传入：code/content
     输出：feedback：
@@ -55,11 +57,14 @@ class NewCase(RequestHandler):
             0    服务器异常
             -1   编码code不唯一
             -2   元素之一为空
-    '''
+    """
+
     def get(self):
         self.render('../templates/case/add.html')
 
     def post(self):
+        ret_dict = {}
+
         code = self.get_argument('code')
         content = self.get_argument('content')
 
@@ -68,25 +73,30 @@ class NewCase(RequestHandler):
             ret_dict['feedback'] = -2
             self.write(json.dumps(ret_dict))
             return
-        code_result = table.find_one({'code':code})
+
+        global table_case
+        code_result = table_case.find_one({'code': code})
         if code_result:
             ret_dict['feedback'] = -1
             self.write(json.dumps(ret_dict))
             return
         new_case = table_case.insert_one(
-            {'code':code,
-             'content':content,
-             'created_dt':time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.time())),
-             'updated_dt':time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.time()))
+            {'code': code,
+             'content': content,
+             'created_dt': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())),
+             'updated_dt': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
              }
         )
         if new_case.inserted_id:
             ret_dict['feedback'] = 1
-            self.write(json.dumps(ret_dict))
-            return
+
+        self.write(json.dumps(ret_dict))
+        print(ret_dict)
+        return
+
 
 class EditCase(RequestHandler):
-    '''
+    """
     编辑用例文本
     传入：code
     输出：feedback：
@@ -94,22 +104,25 @@ class EditCase(RequestHandler):
             0    服务器异常
             -1   code不存在
          case
-    '''
+    """
+
     def get(self):
         self.render('../templates/case/added.html')
 
     def post(self):
+        ret_dict = {}
+        global table_case
+
         code = self.get_argument('code')
-        code_result = table_case.find_one({'code':code})
+        code_result = table_case.find_one({'code': code})
 
         ret_dict['feedback'] = 0
         if code_result:
             ret_dict['feedback'] = 1
-            case = [{'code':code, 'content':code_result['content']}]
+            case = [{'code': code, 'content': code_result['content']}]
             self.write(json.dumps(ret_dict))
             return case
         if not code_result:
             ret_dict['feedback'] = -1
             self.write(json.dumps(ret_dict))
             return
-
