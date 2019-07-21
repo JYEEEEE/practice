@@ -14,8 +14,10 @@ import os
 import tornado.ioloop
 import tornado.web
 
+from backend.case.handler import NewCase, EditCase
 from backend.home import MainHandler, MathAddHandler
 from backend.auth.handler import Register, Login
+from backend.index import IndexHandler
 
 
 def make_app():
@@ -28,7 +30,10 @@ def make_app():
         (r"/", MainHandler),
         (r"/add", MathAddHandler),
         (r"/register", Register),
-        (r"/login", Login)
+        (r"/login", Login),
+        (r"/index", IndexHandler),
+        (r"/case/add", NewCase),
+        (r"/case/edit", EditCase)
     ], **setting)
 
 
