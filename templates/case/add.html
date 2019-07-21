@@ -417,12 +417,14 @@
             var url = null;
             ajaxPost(url, {'code': code, 'content': content}, function (ret) {
                 ret = ret.feedback;
-                if (ret === 0) {
+                if (ret === 1) {
                     alert('success')
-                } else if (ret === 1) {
+                } else if (ret === 0) {
                     alert('server error')
-                } else if (ret === 2) {
+                } else if (ret === -2) {
                     alert('param error')
+                } else if (ret === -1) {
+                    alert('duplicate code')
                 }
 
             })
