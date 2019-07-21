@@ -39,28 +39,77 @@ feedback/code/content/status/
 """
 
 import json
-import pymong
+import pymongo
+import time
 from tornado.web import RequestHandler
 mongo_client = pymongo.MongoClient('mongodb://127.0.0.1:27017/')
 db = mongo_client['cases']
 table_case = db.test_cases
 
 class NewCase(RequestHandler):
+    '''
+    新增用例文本
+    传入：code/content
+    输出：feedback：
+            1    成功保存
+            0    服务器异常
+            -1   编码code不唯一
+            -2   元素之一为空
+    '''
     def get(self):
         self.render('../templates/case/add.html')
 
     def post(self):
         code = self.get_argument('code')
         content = self.get_argument('content')
-        status = self.get_argument('status')
 
         ret_dict['feedback'] = 0
-        if not code or not content or not status:
+        if not code or not content:
             ret_dict['feedback'] = -2
             self.write(json.dumps(ret_dict))
             return
         code_result = table.find_one({'code':code})
-        if code_result:ret_dict['feedback'] = -1
+        if code_result:
+            ret_dict['feedback'] = -1
             self.write(json.dumps(ret_dict))
             return
-        new_case = table_case.insert_one({'code':code, 'content':content})
+        new_case = table_case.insert_one(
+            {'code':code,
+             'content':content,
+             'created_dt':time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.time())),
+             'updated_dt':time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.time()))
+             }
+        )
+        if new_case.inserted_id:
+            ret_dict['feedback'] = 1
+            self.write(json.dumps(ret_dict))
+            return
+
+class EditCase(RequestHandler):
+    '''
+    编辑用例文本
+    传入：code
+    输出：feedback：
+            1    成功找到
+            0    服务器异常
+            -1   code不存在
+         case
+    '''
+    def get(self):
+        self.render('../templates/case/added.html')
+
+    def post(self):
+        code = self.get_argument('code')
+        code_result = table_case.find_one({'code':code})
+
+        ret_dict['feedback'] = 0
+        if code_result:
+            ret_dict['feedback'] = 1
+            case = [{'code':code, 'content':code_result['content']}]
+            self.write(json.dumps(ret_dict))
+            return case
+        if not code_result:
+            ret_dict['feedback'] = -1
+            self.write(json.dumps(ret_dict))
+            return
+
