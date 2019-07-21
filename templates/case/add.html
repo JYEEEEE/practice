@@ -272,22 +272,22 @@
                               <label class="custom-control-label" for="customToggle1"></label>
                             </div>
                         </span>
-<!--                                        <span class="d-flex mb-2">-->
-<!--                          <i class="material-icons mr-1">visibility</i>-->
-<!--                          <strong class="mr-1">Visibility:</strong>-->
-<!--                          <strong class="text-success">Public</strong>-->
-<!--                          <a class="ml-auto" href="#">Edit</a>-->
-<!--                        </span>-->
-<!--                                        <span class="d-flex mb-2">-->
-<!--                          <i class="material-icons mr-1">calendar_today</i>-->
-<!--                          <strong class="mr-1">Schedule:</strong> Now-->
-<!--                          <a class="ml-auto" href="#">Edit</a>-->
-<!--                        </span>-->
-<!--                                        <span class="d-flex">-->
-<!--                          <i class="material-icons mr-1">score</i>-->
-<!--                          <strong class="mr-1">Readability:</strong>-->
-<!--                          <strong class="text-warning">Ok</strong>-->
-<!--                        </span>-->
+                                        <!--                                        <span class="d-flex mb-2">-->
+                                        <!--                          <i class="material-icons mr-1">visibility</i>-->
+                                        <!--                          <strong class="mr-1">Visibility:</strong>-->
+                                        <!--                          <strong class="text-success">Public</strong>-->
+                                        <!--                          <a class="ml-auto" href="#">Edit</a>-->
+                                        <!--                        </span>-->
+                                        <!--                                        <span class="d-flex mb-2">-->
+                                        <!--                          <i class="material-icons mr-1">calendar_today</i>-->
+                                        <!--                          <strong class="mr-1">Schedule:</strong> Now-->
+                                        <!--                          <a class="ml-auto" href="#">Edit</a>-->
+                                        <!--                        </span>-->
+                                        <!--                                        <span class="d-flex">-->
+                                        <!--                          <i class="material-icons mr-1">score</i>-->
+                                        <!--                          <strong class="mr-1">Readability:</strong>-->
+                                        <!--                          <strong class="text-warning">Ok</strong>-->
+                                        <!--                        </span>-->
                                     </li>
                                     <li class="list-group-item d-flex px-3">
                                         <!--                                        <button class="btn btn-sm btn-outline-accent">-->
@@ -415,7 +415,17 @@
             var content = $("#editor-container").html();
 
             var url = null;
-            ajaxPost(url, {'code': code, 'content': content})
+            ajaxPost(url, {'code': code, 'content': content}, function (ret) {
+                ret = ret.feedback;
+                if (ret === 0) {
+                    alert('success')
+                } else if (ret === 1) {
+                    alert('server error')
+                } else if (ret === 2) {
+                    alert('param error')
+                }
+
+            })
         })
     })
 </script>
