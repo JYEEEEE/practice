@@ -107,7 +107,7 @@ class EditCase(RequestHandler):
     """
 
     def get(self):
-        self.render('../templates/case/added.html')
+        self.render('../templates/case/edit.html')
 
     def post(self):
         ret_dict = {}
